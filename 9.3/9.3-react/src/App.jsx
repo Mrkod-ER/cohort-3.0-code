@@ -1,21 +1,19 @@
-import { useEffect } from "react";
-import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  function increaseCount() {
-    setCount(count => count + 1);
-  }
-
-  useEffect(function() {
-    console.log("above setinterval");
-    setInterval(increaseCount, 2000);
-  }, []);
 
   return (
     <div>
-      {count}
+      <Card>
+
+      </Card>
+    </div>
+  )
+}
+
+function Card({ children }) {
+  return(
+    <div style={{background: "black", borderRadius: 20, color: "white"}}>
+      {children}
     </div>
   )
 }
