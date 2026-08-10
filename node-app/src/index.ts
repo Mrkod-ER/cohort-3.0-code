@@ -41,38 +41,48 @@
 // }
 
 
-type UserType = { // difference between type and interface
-    name: string, 
-    age: number
-}
+// type UserType = { // difference between type and interface
+//     name: string, 
+//     age: number
+// }
 
 
-interface Person {
-    name: string, 
-    age: number, 
-    // greet: () => string,  
-}
+// interface Person {
+//     name: string, 
+//     age: number, 
+//     // greet: () => string,  
+// }
 
-const person: Person = { // how classes are different from these objects
-    name: "harkirat", 
-    age: 25, 
-    // greet: () => {
-    //     return "hi"
-    // }
-}
+// const person: Person = { // how classes are different from these objects
+//     name: "harkirat", 
+//     age: 25, 
+//     // greet: () => {
+//     //     return "hi"
+//     // }
+// }
 
-class Manager implements Person {
-    name: string;
-    age: number;
+// class Manager implements Person {
+//     name: string;
+//     age: number;
 
-    constructor(name: string, age: number) {
-        this.name = name; 
-        this.age = age; 
-    }
+//     constructor(name: string, age: number) {
+//         this.name = name; 
+//         this.age = age; 
+//     }
 
-}
+// }
 
-let user = new Manager("john", 30);
+// let user = new Manager("john", 30);
 
 // interface -- objects or -- make a class
 // class -- make objects
+
+interface User {
+    firstName: string, 
+    lastName: string, 
+    age: number
+}
+
+function isLegal(arr: User[]) {
+    return arr.filter(it => it.age >= 18);
+}
