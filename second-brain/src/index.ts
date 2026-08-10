@@ -1,3 +1,12 @@
+declare global {
+    namespace Express {
+        export interface Request {
+            userId: string; 
+        }
+    }
+}
+
+
 import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
@@ -5,6 +14,10 @@ import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import { Content, User } from "./db.js"
 import { userMiddleware } from "./middleware.js";
+
+
+
+
 
 dotenv.config();
 
@@ -114,7 +127,6 @@ app.delete("/api/v1/content",userMiddleware, async (req, res) => {
 
     await Content.deleteMany({
         contentId, 
-        //@ts-ignore
         userId: req.userId
     })
 
