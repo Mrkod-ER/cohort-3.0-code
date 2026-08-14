@@ -12,8 +12,9 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-import { Content, User } from "./db.js"
+import { Content, Link, User } from "./db.js"
 import { userMiddleware } from "./middleware.js";
+import { random } from "./utils.js";
 
 
 
@@ -136,11 +137,74 @@ app.delete("/api/v1/content",userMiddleware, async (req, res) => {
 
 })
 
-app.post("/api/v1/brain/share", (req, res) => {
+app.post("/api/v1/brain/share",userMiddleware, async (req, res) => {
+    const share = req.body.share; 
+    if(share) {
+        const existingLink = await Link.findOne({
+            userId: req.userId
+        });
+        if(existingLink) {
+            res.json({
+                hash: existingLink.hash
+            })
+            return; 
+        }
+       
+        const hash = random(10);
+        await Link.create({
+            userId: req.userId,
+            hash: hash
+        })
+        
+        res.json({
+        message: "/share/" + hash
+        })
+         
+
+    } else {
+        Link.deleteOne({
+            userId: req.userId
+        });
+
+        res.json({
+            message: "removed link"
+        })
+    }
 
 })
 
-app.get("/api/v1/brain/:shareLink", (req, res) => {
+app.get("/api/v1/brain/:shareLink",userMiddleware, async (req, res) => {
+    const hash = req.params.shareLink as string; 
+
+    const link = await Link.findOne({
+        hash
+    });
+
+    if(!link) {
+        res.status(411).json({
+            message: "Sorry incorrect input"
+        })
+        return; 
+    }
+    const content = await Content.find({
+        userId: link.userId
+    })
+
+    const userData = await User.findOne({
+        _id: link.userId
+    })
+
+    if(!userData || !content) {
+        res.status(411).json({
+            message: "sorry user or content does not exist"
+        })
+        return; 
+    }
+
+    res.json({
+        username: userData.username, 
+        content: content
+    })
 
 })
 
